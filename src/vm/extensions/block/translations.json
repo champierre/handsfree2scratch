@@ -1,11 +1,16 @@
 {
   "en": {
     "handsfree2scratch.name": "Handsfree2Scratch",
-    "handsfree2scratch.doIt": "do it [SCRIPT]"
+    "handsfree2scratch.doIt": "do it [SCRIPT]",
+    "handsfree2scratch.getX": "x of [LANDMARK]",
+    "handsfree2scratch.leftHand1": "wrist",
+    "handsfree2scratch.leftHand8": "left hand index finger"
   },
   "ja": {
     "handsfree2scratch.name": "Handsfree2Scratch",
-    "handsfree2scratch.doIt": "[SCRIPT] を実行する"
+    "handsfree2scratch.doIt": "[SCRIPT] を実行する",
+    "handsfree2scratch.leftHand1": "手首", 
+    "handsfree2scratch.leftHand8": "人差し指の先端"
   },
   "ja-Hira": {
     "handsfree2scratch.name": "Handsfree2Scratch",

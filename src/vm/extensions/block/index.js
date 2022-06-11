@@ -89,6 +89,24 @@ class ExtensionBlocks {
             // Replace 'formatMessage' to a formatter which is used in the runtime.
             formatMessage = runtime.formatMessage;
         }
+
+        const scriptElem = document.createElement('script');
+        scriptElem.src = 'https://unpkg.com/handsfree@8.5.1/build/lib/handsfree.js';
+        document.head.appendChild(scriptElem);
+
+        setTimeout(() => {
+            const handsfree = new Handsfree({showDebug: true, hands: true});
+            handsfree.start();
+        
+            // Create a plugin named "logger" to show data on every frame
+            handsfree.use('logger', data => {
+                console.log(data.hands);
+            })
+        }, 1000);
+
+
+
+        
     }
 
     doIt (args) {
@@ -96,6 +114,19 @@ class ExtensionBlocks {
         const result = func.call(this);
         console.log(result);
         return result;
+    }
+
+    getX (args) {
+        console.log(args.LANDMARK);
+    }
+
+
+    get LANDMARK_MENU () {
+        let landmark_menu = [];
+        for (let i = 1; i <= 1; i++) {
+            landmark_menu.push({text: `${formatMessage({id: 'handsfree2scratch.leftHand' + i})} (${i})`, value: String(i)})
+        }
+        return landmark_menu;
     }
 
     /**
@@ -123,12 +154,35 @@ class ExtensionBlocks {
                     arguments: {
                         SCRIPT: {
                             type: ArgumentType.STRING,
-                            defaultValue: '3 + 4'
+                            defaultValue: '3 + 5'
                         }
                     }
-                }
+                },
+                {
+                    opcode: 'getX',
+                    blockType: BlockType.REPORTER,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'handsfree2scratch.getX',
+                        default: 'x of [LANDMARK]',
+                        description: 'x of the selected landmark'
+                    }),
+                    func: 'getX',
+                    arguments: {
+                        LANDMARK: {
+                            type: ArgumentType.STRING,
+                            menu: 'landmark',
+                            defaultValue: '0'
+                        }
+                    }
+                },
+
             ],
             menus: {
+                landmark: {
+                    acceptReporters: true,
+                    items: this.LANDMARK_MENU
+                }
             }
         };
     }
