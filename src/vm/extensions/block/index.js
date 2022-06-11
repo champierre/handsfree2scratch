@@ -94,6 +94,16 @@ class ExtensionBlocks {
         scriptElem.src = 'https://unpkg.com/handsfree@8.5.1/build/lib/handsfree.js';
         document.head.appendChild(scriptElem);
 
+        const linkElem = document.createElement('link');
+        linkElem.rel = 'stylesheet';
+        linkElem.href = 'https://unpkg.com/handsfree@8.0.4/build/lib/assets/handsfree.css';
+        document.head.appendChild(linkElem);
+
+        const linkElem2 = document.createElement('link');
+        linkElem2.rel = 'stylesheet';
+        linkElem2.href = 'https://raw.githubusercontent.com/champierre/handsfree2scratch/css/handsfree2scratch.js';
+        document.head.appendChild(linkElem2);
+
         this.hands = []
 
         setTimeout(() => {
@@ -103,13 +113,13 @@ class ExtensionBlocks {
             // Create a plugin named "logger" to show data on every frame
             handsfree.use('logger', data => {
                 this.hands = data.hands;
-                console.log(this.hands.landmarks[0]);
+                // console.log(this.hands.landmarks[0]);
             })
         }, 1000);
     }
 
     getLeftHandX (args) {
-        let landmark = args.LANDMARK - 1;
+        let landmark = args.LANDMARK;
         if (this.hands && this.hands.landmarks[0] && this.hands.landmarks[0][landmark]) {
             if (this.runtime.ioDevices.video.mirror === false) {
                 return -1 * (240 - this.hands.landmarks[0][landmark].x * 480);
@@ -122,7 +132,7 @@ class ExtensionBlocks {
     }
 
     getLeftHandY (args) {
-        let landmark = args.LANDMARK - 1;
+        let landmark = args.LANDMARK;
         if (this.hands && this.hands.landmarks[0] && this.hands.landmarks[0][landmark]) {
             return 180 - this.hands.landmarks[0][landmark].y * 360;
         } else {
@@ -131,7 +141,7 @@ class ExtensionBlocks {
     }
 
     getRightHandX (args) {
-        let landmark = args.LANDMARK - 1;
+        let landmark = args.LANDMARK;
         if (this.hands && this.hands.landmarks[1] && this.hands.landmarks[1][landmark]) {
             if (this.runtime.ioDevices.video.mirror === false) {
                 return -1 * (240 - this.hands.landmarks[1][landmark].x * 480);
@@ -144,7 +154,7 @@ class ExtensionBlocks {
     }
 
     getRightHandY (args) {
-        let landmark = args.LANDMARK - 1;
+        let landmark = args.LANDMARK;
         if (this.hands && this.hands.landmarks[1] && this.hands.landmarks[1][landmark]) {
             return 180 - this.hands.landmarks[1][landmark].y * 360;
         } else {
@@ -164,7 +174,7 @@ class ExtensionBlocks {
 
     get LANDMARK_MENU () {
         let landmark_menu = [];
-        for (let i = 1; i <= 1; i++) {
+        for (let i = 0; i <= 20; i++) {
             landmark_menu.push({text: `${formatMessage({id: 'handsfree2scratch.handLandmark' + i})} (${i})`, value: i})
         }
         return landmark_menu;
@@ -213,7 +223,7 @@ class ExtensionBlocks {
                         LANDMARK: {
                             type: ArgumentType.STRING,
                             menu: 'landmark',
-                            defaultValue: 1
+                            defaultValue: 0
                         }
                     }
                 },
@@ -231,7 +241,7 @@ class ExtensionBlocks {
                         LANDMARK: {
                             type: ArgumentType.STRING,
                             menu: 'landmark',
-                            defaultValue: 1
+                            defaultValue: 0
                         }
                     }
                 },
@@ -249,7 +259,7 @@ class ExtensionBlocks {
                         LANDMARK: {
                             type: ArgumentType.STRING,
                             menu: 'landmark',
-                            defaultValue: 1
+                            defaultValue: 0
                         }
                     }
                 },
@@ -267,7 +277,7 @@ class ExtensionBlocks {
                         LANDMARK: {
                             type: ArgumentType.STRING,
                             menu: 'landmark',
-                            defaultValue: 1
+                            defaultValue: 0
                         }
                     }
                 },
