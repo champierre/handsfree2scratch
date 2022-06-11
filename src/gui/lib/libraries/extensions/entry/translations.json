@@ -1,0 +1,14 @@
+{
+  "en": {
+    "handsfree2scratch.entry.name": "Handsfree2Scratch",
+    "handsfree2scratch.entry.description": "Description of this extension"
+  },
+  "ja": {
+    "handsfree2scratch.entry.name": "Handsfree2Scratch",
+    "handsfree2scratch.entry.description": "拡張機能の説明"
+  },
+  "ja-Hira": {
+    "handsfree2scratch.entry.name": "Handsfree2Scratch",
+    "handsfree2scratch.entry.description": "かくちょうきのうのせつめい"
+  }
+}
