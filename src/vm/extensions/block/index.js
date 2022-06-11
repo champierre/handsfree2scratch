@@ -101,7 +101,7 @@ class ExtensionBlocks {
 
         const linkElem2 = document.createElement('link');
         linkElem2.rel = 'stylesheet';
-        linkElem2.href = 'https://raw.githubusercontent.com/champierre/handsfree2scratch/css/handsfree2scratch.css';
+        linkElem2.href = 'https://raw.githubusercontent.com/champierre/handsfree2scratch/main/css/handsfree2scratch.css';
         document.head.appendChild(linkElem2);
 
         this.hands = []
