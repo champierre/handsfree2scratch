@@ -1,19 +1,41 @@
 {
   "en": {
     "handsfree2scratch.name": "Handsfree2Scratch",
-    "handsfree2scratch.doIt": "do it [SCRIPT]",
-    "handsfree2scratch.getX": "x of [LANDMARK]",
-    "handsfree2scratch.leftHand1": "wrist",
-    "handsfree2scratch.leftHand8": "left hand index finger"
+    "handsfree2scratch.getLeftHandX": "x of left hand [LANDMARK]",
+    "handsfree2scratch.getLeftHandY": "y of left hand [LANDMARK]",
+    "handsfree2scratch.getRightHandX": "x of right hand [LANDMARK]",
+    "handsfree2scratch.getRightHandY": "y of right hand [LANDMARK]",
+    "handsfree2scratch.handLandmark1": "wrist",
+    "handsfree2scratch.handLandmark8": "left hand index finger",
+    "handsfree2scratch.videoToggle": "turn video [VIDEO_STATE]",
+    "handsfree2scratch.on": "on",
+    "handsfree2scratch.off": "off",
+    "handsfree2scratch.onFlipped": "on flipped"
   },
   "ja": {
     "handsfree2scratch.name": "Handsfree2Scratch",
-    "handsfree2scratch.doIt": "[SCRIPT] を実行する",
-    "handsfree2scratch.leftHand1": "手首", 
-    "handsfree2scratch.leftHand8": "人差し指の先端"
+    "handsfree2scratch.getLeftHandX": "左 [LANDMARK] のx座標",
+    "handsfree2scratch.getLeftHandY": "左 [LANDMARK] のy座標",
+    "handsfree2scratch.getRightHandX": "右 [LANDMARK] のx座標",
+    "handsfree2scratch.getRightHandY": "右 [LANDMARK] のy座標",
+    "handsfree2scratch.handLandmark1": "手首", 
+    "handsfree2scratch.handLandmark8": "人差し指の先端",
+    "handsfree2scratch.videoToggle": "ビデオを [VIDEO_STATE] にする",
+    "handsfree2scratch.on": "入",
+    "handsfree2scratch.off": "切",
+    "handsfree2scratch.onFlipped": "左右反転"
   },
   "ja-Hira": {
     "handsfree2scratch.name": "Handsfree2Scratch",
-    "handsfree2scratch.doIt": "[SCRIPT] をじっこうする"
+    "handsfree2scratch.getLeftHandX": "ひだり [LANDMARK] のxざひょう",
+    "handsfree2scratch.getLeftHandY": "ひだり [LANDMARK] のyざひょう",
+    "handsfree2scratch.getRightHandX": "みぎ [LANDMARK] のxざひょう",
+    "handsfree2scratch.getRightHandY": "みぎ [LANDMARK] のyざひょう",
+    "handsfree2scratch.handLandmark1": "てくび", 
+    "handsfree2scratch.handLandmark8": "ひとさしゆびのせんたん",
+    "handsfree2scratch.videoToggle": "ビデオを [VIDEO_STATE] にする",
+    "handsfree2scratch.on": "いり",
+    "handsfree2scratch.off": "きり",
+    "handsfree2scratch.onFlipped": "さゆうはんてん"
   }
 }
