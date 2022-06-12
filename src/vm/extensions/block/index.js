@@ -90,30 +90,54 @@ class ExtensionBlocks {
             formatMessage = runtime.formatMessage;
         }
 
-        const scriptElem = document.createElement('script');
-        scriptElem.src = 'https://unpkg.com/handsfree@8.5.1/build/lib/handsfree.js';
-        document.head.appendChild(scriptElem);
-
         const linkElem = document.createElement('link');
         linkElem.rel = 'stylesheet';
         linkElem.href = 'https://unpkg.com/handsfree@8.0.4/build/lib/assets/handsfree.css';
         document.head.appendChild(linkElem);
 
-        const linkElem2 = document.createElement('link');
-        linkElem2.rel = 'stylesheet';
-        linkElem2.href = 'https://raw.githubusercontent.com/champierre/handsfree2scratch/main/css/handsfree2scratch.css';
-        document.head.appendChild(linkElem2);
+        const scriptElem = document.createElement('script');
+        scriptElem.src = 'https://unpkg.com/handsfree@8.5.1/build/lib/handsfree.js';
+        document.head.appendChild(scriptElem);
 
-        this.hands = []
+        this.hands = {}
+        this.pose = {}
 
         setTimeout(() => {
-            const handsfree = new Handsfree({showDebug: false, hands: true});
+            const handsfree = new Handsfree({
+                showDebug: false,
+                hands: true,
+                pose: true,
+                facemesh: true,
+                setup: {
+                    canvas: {
+                        hands: {
+                            width: 480,
+                            height: 360
+                        },
+                        pose: {
+                            width: 480,
+                            height: 360
+                        },
+                        facemesh: {
+                            width: 480,
+                            height: 360
+                        }
+                    },
+                    video: {
+                        width: 480,
+                        height: 360
+                    }
+                }
+            });
             handsfree.start();
         
+            document.querySelector('.handsfree-debugger').style.display = 'none';
+
             // Create a plugin named "logger" to show data on every frame
             handsfree.use('logger', data => {
                 this.hands = data.hands;
-                // console.log(this.hands.landmarks[0]);
+                this.pose = data.pose;
+                this.facemesh = data.facemesh;
             })
         }, 1000);
     }
@@ -162,6 +186,50 @@ class ExtensionBlocks {
         }
     }
 
+    getPoseX (args) {
+        let landmark = args.LANDMARK;
+        if (this.pose && this.pose.poseLandmarks && this.pose.poseLandmarks[landmark]) {
+            if (this.runtime.ioDevices.video.mirror === false) {
+                return -1 * (240 - this.pose.poseLandmarks[landmark].x * 480);
+            } else {
+                return 240 - this.pose.poseLandmarks[landmark].x * 480;
+            }
+        } else {
+            return "";
+        }
+    }
+
+    getPoseY (args) {
+        let landmark = args.LANDMARK;
+        if (this.pose && this.pose.poseLandmarks && this.pose.poseLandmarks[landmark]) {
+            return 180 - this.pose.poseLandmarks[landmark].y * 360;
+        } else {
+            return "";
+        }
+    }
+
+    getFaceX (args) {
+        let landmark = args.LANDMARK;
+        if (this.facemesh && this.facemesh.multiFaceLandmarks && this.facemesh.multiFaceLandmarks[0][landmark]) {
+            if (this.runtime.ioDevices.video.mirror === false) {
+                return -1 * (240 - this.facemesh.multiFaceLandmarks[0][landmark].x * 480);
+            } else {
+                return 240 - this.facemesh.multiFaceLandmarks[0][landmark].x * 480;
+            }
+        } else {
+            return "";
+        }
+    }
+
+    getFaceY (args) {
+        let landmark = args.LANDMARK;
+        if (this.facemesh && this.facemesh.multiFaceLandmarks && this.facemesh.multiFaceLandmarks[0][landmark]) {
+            return 180 - this.facemesh.multiFaceLandmarks[0][landmark].y * 360;
+        } else {
+            return "";
+        }
+    }
+
     videoToggle (args) {
         let state = args.VIDEO_STATE;
         if (state === 'off') {
@@ -172,10 +240,26 @@ class ExtensionBlocks {
         }
     }
 
-    get LANDMARK_MENU () {
+    get HAND_LANDMARK_MENU () {
         let landmark_menu = [];
         for (let i = 0; i <= 20; i++) {
             landmark_menu.push({text: `${formatMessage({id: 'handsfree2scratch.handLandmark' + i})} (${i})`, value: i})
+        }
+        return landmark_menu;
+    }
+
+    get POSE_LANDMARK_MENU () {
+        let landmark_menu = [];
+        for (let i = 0; i <= 32; i++) {
+            landmark_menu.push({text: `${formatMessage({id: 'handsfree2scratch.poseLandmark' + i})} (${i})`, value: i})
+        }
+        return landmark_menu;
+    }
+
+    get FACE_LANDMARK_MENU () {
+        let landmark_menu = [];
+        for (let i = 1; i <= 468; i++) {
+            landmark_menu.push({text: String(i), value: i - 1})
         }
         return landmark_menu;
     }
@@ -222,7 +306,7 @@ class ExtensionBlocks {
                     arguments: {
                         LANDMARK: {
                             type: ArgumentType.STRING,
-                            menu: 'landmark',
+                            menu: 'handLandmark',
                             defaultValue: 0
                         }
                     }
@@ -240,7 +324,7 @@ class ExtensionBlocks {
                     arguments: {
                         LANDMARK: {
                             type: ArgumentType.STRING,
-                            menu: 'landmark',
+                            menu: 'handLandmark',
                             defaultValue: 0
                         }
                     }
@@ -258,7 +342,7 @@ class ExtensionBlocks {
                     arguments: {
                         LANDMARK: {
                             type: ArgumentType.STRING,
-                            menu: 'landmark',
+                            menu: 'handLandmark',
                             defaultValue: 0
                         }
                     }
@@ -276,7 +360,79 @@ class ExtensionBlocks {
                     arguments: {
                         LANDMARK: {
                             type: ArgumentType.STRING,
-                            menu: 'landmark',
+                            menu: 'handLandmark',
+                            defaultValue: 0
+                        }
+                    }
+                },
+                {
+                    opcode: 'getPoseX',
+                    blockType: BlockType.REPORTER,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'handsfree2scratch.getPoseX',
+                        default: 'x of pose [LANDMARK]',
+                        description: 'Get x of the selected pose landmark'
+                    }),
+                    func: 'getPoseX',
+                    arguments: {
+                        LANDMARK: {
+                            type: ArgumentType.STRING,
+                            menu: 'poseLandmark',
+                            defaultValue: 0
+                        }
+                    }
+                },
+                {
+                    opcode: 'getPoseY',
+                    blockType: BlockType.REPORTER,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'handsfree2scratch.getPoseY',
+                        default: 'y of pose [LANDMARK]',
+                        description: 'Get y of the selected pose landmark'
+                    }),
+                    func: 'getPoseY',
+                    arguments: {
+                        LANDMARK: {
+                            type: ArgumentType.STRING,
+                            menu: 'poseLandmark',
+                            defaultValue: 0
+                        }
+                    }
+                },
+                {
+                    opcode: 'getFaceX',
+                    blockType: BlockType.REPORTER,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'handsfree2scratch.getFaceX',
+                        default: 'x of face [LANDMARK]',
+                        description: 'Get x of the selected face landmark'
+                    }),
+                    func: 'getFaceX',
+                    arguments: {
+                        LANDMARK: {
+                            type: ArgumentType.STRING,
+                            menu: 'faceLandmark',
+                            defaultValue: 0
+                        }
+                    }
+                },
+                {
+                    opcode: 'getFaceY',
+                    blockType: BlockType.REPORTER,
+                    blockAllThreads: false,
+                    text: formatMessage({
+                        id: 'handsfree2scratch.getFaceY',
+                        default: 'y of face [LANDMARK]',
+                        description: 'Get y of the selected face landmark'
+                    }),
+                    func: 'getFaceY',
+                    arguments: {
+                        LANDMARK: {
+                            type: ArgumentType.STRING,
+                            menu: 'faceLandmark',
                             defaultValue: 0
                         }
                     }
@@ -301,9 +457,17 @@ class ExtensionBlocks {
                 },
             ],
             menus: {
-                landmark: {
+                handLandmark: {
                     acceptReporters: true,
-                    items: this.LANDMARK_MENU
+                    items: this.HAND_LANDMARK_MENU
+                },
+                poseLandmark: {
+                    acceptReporters: true,
+                    items: this.POSE_LANDMARK_MENU
+                },
+                faceLandmark: {
+                    acceptReporters: true,
+                    items: this.FACE_LANDMARK_MENU
                 },
                 video: {
                     acceptReporters: true,
